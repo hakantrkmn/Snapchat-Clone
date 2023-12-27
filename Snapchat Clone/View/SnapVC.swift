@@ -33,11 +33,8 @@ class SnapVC: UIViewController {
     var snap : Snap?
     var timeLeftLabel : UILabel = {
         var label = UILabel()
-        
-        label.text = " deneme "
-        label.layer.borderWidth = 1
+        label.text = ""
         label.textAlignment = .center
-        label.layer.borderColor = UIColor.black.cgColor
         
         return label
     }()
@@ -49,7 +46,6 @@ class SnapVC: UIViewController {
         
         
         
-        // Do any additional setup after loading the view.
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -98,9 +94,14 @@ extension SnapVC : UICollectionViewDelegate , UICollectionViewDataSource , UICol
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SnapCVCell.identifier, for: indexPath) as? SnapCVCell{
-            print(indexPath.section)
+            
+            guard let snap = snap else {
+                return UICollectionViewCell()
 
-            cell.configure(url: snap!.imageUrlArray[indexPath.section])
+            }
+
+            cell.configure(url: snap.imageUrlArray[indexPath.section])
+            timeLeftLabel.text = "Time left :  \(snap.timeLeft ?? 0)"
             return cell
 
         } else {

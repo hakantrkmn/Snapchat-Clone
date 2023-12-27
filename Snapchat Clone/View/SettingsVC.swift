@@ -10,16 +10,19 @@ import TinyConstraints
 import FirebaseAuth
 class SettingsVC: UIViewController {
 
+    
+    var service =  FirebaseService()
+    
     let logoutButton : UIButton = {
-        let button  = UIButton()
         
-        button.setTitle("Logout", for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        button.setTitle("sa", for: .highlighted)
-        button.setTitleColor(.systemPink, for: .highlighted)
-        button.layer.borderColor = UIColor.black.cgColor
-        button.layer.borderWidth = CGFloat(1)
-        button.layer.cornerRadius = CGFloat(8)
+        var config = UIButton.Configuration.filled()
+        config.baseBackgroundColor = .systemRed
+        config.attributedTitle = AttributedString("Logout")
+        
+        
+        let button  = UIButton(configuration: config)
+        
+       
         
         return button
     }()
@@ -37,16 +40,12 @@ class SettingsVC: UIViewController {
     
     @objc func logoutButtonTapped(){
         
-        do {
-            try Auth.auth().signOut()
-            let vc = SignInVC()
-            vc.modalPresentationStyle = .fullScreen
-            self.present(vc, animated: true)
-            
-        }catch{
+        service.logOutUser { error in
+            if error != nil {
+                self.createAlert(title: "Error", message: error?.localizedDescription ?? "")
+            }
             
         }
-        
         
     }
     

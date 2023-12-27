@@ -91,7 +91,9 @@ class SignInVC: UIViewController {
     
     
     
-    func setupUI(){
+    func setupUI()
+    {
+        
         
         appNameLabel.translatesAutoresizingMaskIntoConstraints      = false
         emailTextField.translatesAutoresizingMaskIntoConstraints    = false

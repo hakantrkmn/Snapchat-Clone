@@ -14,8 +14,10 @@ class FeedTVCell: UITableViewCell {
     
     var usernameLabel : UILabel = {
         var label = UILabel()
-        label.text = "hakantrkmn"
+        label.text = ""
         label.textColor = .black
+        label.font = UIFont.boldSystemFont(ofSize: 16.0)
+        label.textAlignment = .center
         return label
     }()
     
@@ -47,15 +49,14 @@ class FeedTVCell: UITableViewCell {
     public func setupUI(){
         
         self.contentView.addSubview(snapView)
-        
         self.contentView.addSubview(usernameLabel)
         
         usernameLabel.translatesAutoresizingMaskIntoConstraints = false
-        
         snapView.translatesAutoresizingMaskIntoConstraints = false
         
-        usernameLabel.top(to: self.contentView )
+        usernameLabel.top(to: self.contentView , offset: 10)
         usernameLabel.centerX(to: self.contentView)
+        
         snapView.topToBottom(of: usernameLabel , offset: 10)
         snapView.centerX(to: usernameLabel)
         snapView.bottom(to: self.contentView)

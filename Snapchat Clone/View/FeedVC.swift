@@ -12,7 +12,7 @@ import FirebaseAuth
 class FeedVC: UIViewController {
 
     
-    let fireStoreDatabase = Firestore.firestore()
+    let vm = FeedVM()
     
     var feedTableView : UITableView = {
        var tableView = UITableView()
@@ -21,41 +21,23 @@ class FeedVC: UIViewController {
     }()
     
     var snapArray = [Snap]()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
 
-        self.title = "feed"
+        self.title = "Feed"
         view.backgroundColor = .systemBackground
         feedTableView.delegate = self
         feedTableView.dataSource = self
-        getUserInfo()
+        
+        vm.getUserInfo(view: self)
 
         getSnapsFromFirebase()
-        //view.addSubview(tabbar.view)
-        // Do any additional setup after loading the view.
+    
     }
     
-    func getUserInfo(){
-        fireStoreDatabase.collection("UserInfo").whereField("email", isEqualTo: Auth.auth().currentUser?.email).getDocuments { snapshot, error in
-            if error != nil {
-                print(error?.localizedDescription)
-            }
-            else {
-                print(snapshot?.count)
-                if snapshot?.isEmpty == false && snapshot != nil {
-                    for document in snapshot!.documents{
-                        if let username = document.get("username") as? String
-                        {
-                            UserSingleton.sharedUserInfo.email = Auth.auth().currentUser!.email!
-                            UserSingleton.sharedUserInfo.username = username
-
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     func setupUI(){
         view.addSubview(feedTableView)
@@ -66,36 +48,16 @@ class FeedVC: UIViewController {
     
     
     func getSnapsFromFirebase(){
-        fireStoreDatabase.collection("Snaps").order(by: "date", descending: true).addSnapshotListener { snapshot, error in
+        snapArray.removeAll()
+        vm.getSnaps { error, snaps in
             if error != nil {
-                print(error?.localizedDescription)
+                self.createAlert(title: "Error", message: error?.localizedDescription ?? "")
             }
             else {
-                if snapshot?.isEmpty == false && snapshot != nil {
-                    self.snapArray.removeAll()
-                    for document in snapshot!.documents {
-                        let documentID = document.documentID
-                        if let username = document.get("snapOwner") as? String{
-                            if let imageUrlArray = document.get("imageUrlArray") as? [String]{
-                                if let date = document.get("date") as? Timestamp {
-                                    
-                                    if let difference = Calendar.current.dateComponents([.hour], from: date.dateValue(), to: Date()).hour{
-                                        if difference >= 24 {
-                                            //self.fireStoreDatabase.collection("Snaps").document(documentID).delete()
-                                        }
-                                    }
-                                    
-                                    let snap = Snap(username: username, imageUrlArray: imageUrlArray, date: date.dateValue())
-                                    self.snapArray.append(snap)
-                                }
-                            }
-                            
-                        }
-                    }
-                    DispatchQueue.main.async {
-                        self.feedTableView.reloadData()
+                self.snapArray = snaps!
+                DispatchQueue.main.async {
+                    self.feedTableView.reloadData()
 
-                    }
                 }
             }
         }
@@ -115,7 +77,7 @@ extension FeedVC : UITableViewDelegate , UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 400
+        return view.safeAreaLayoutGuide.layoutFrame.height / 1.5
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
