@@ -15,6 +15,9 @@
 		4984C1B62B3B1EC3001293C8 /* SnapCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4984C1B52B3B1EC3001293C8 /* SnapCVCell.swift */; };
 		4984C1BA2B3C405F001293C8 /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4984C1B92B3C405F001293C8 /* FirebaseService.swift */; };
 		4984C1BD2B3C40EA001293C8 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4984C1BC2B3C40EA001293C8 /* Utility.swift */; };
+		4984C1BF2B3C4B48001293C8 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4984C1BE2B3C4B48001293C8 /* User.swift */; };
+		4984C1C12B3C528A001293C8 /* UIViewController+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4984C1C02B3C528A001293C8 /* UIViewController+Ext.swift */; };
+		4984C1C42B3C594F001293C8 /* AuthenticationVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4984C1C32B3C594F001293C8 /* AuthenticationVM.swift */; };
 		49A6C3FB2B35C57800389F78 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A6C3FA2B35C57800389F78 /* AppDelegate.swift */; };
 		49A6C3FD2B35C57800389F78 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A6C3FC2B35C57800389F78 /* SceneDelegate.swift */; };
 		49A6C3FF2B35C57800389F78 /* SignInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A6C3FE2B35C57800389F78 /* SignInVC.swift */; };
@@ -68,6 +71,9 @@
 		4984C1B52B3B1EC3001293C8 /* SnapCVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapCVCell.swift; sourceTree = "<group>"; };
 		4984C1B92B3C405F001293C8 /* FirebaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
 		4984C1BC2B3C40EA001293C8 /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
+		4984C1BE2B3C4B48001293C8 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		4984C1C02B3C528A001293C8 /* UIViewController+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Ext.swift"; sourceTree = "<group>"; };
+		4984C1C32B3C594F001293C8 /* AuthenticationVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationVM.swift; sourceTree = "<group>"; };
 		49A6C3F72B35C57800389F78 /* Snapchat Clone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Snapchat Clone.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		49A6C3FA2B35C57800389F78 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		49A6C3FC2B35C57800389F78 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -134,6 +140,7 @@
 			children = (
 				4984C1A92B386244001293C8 /* UserSingleton.swift */,
 				4984C1AD2B39B1B5001293C8 /* Snap.swift */,
+				4984C1BE2B3C4B48001293C8 /* User.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -150,6 +157,7 @@
 		4984C1B72B3C4036001293C8 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				4984C1C32B3C594F001293C8 /* AuthenticationVM.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -166,6 +174,7 @@
 			isa = PBXGroup;
 			children = (
 				4984C1BC2B3C40EA001293C8 /* Utility.swift */,
+				4984C1C02B3C528A001293C8 /* UIViewController+Ext.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -338,12 +347,15 @@
 				4984C1AA2B386244001293C8 /* UserSingleton.swift in Sources */,
 				49BCE9502B37114A0082C638 /* SnapVC.swift in Sources */,
 				49A6C4202B36F69800389F78 /* TabBarController.swift in Sources */,
+				4984C1C42B3C594F001293C8 /* AuthenticationVM.swift in Sources */,
 				4984C1B62B3B1EC3001293C8 /* SnapCVCell.swift in Sources */,
+				4984C1BF2B3C4B48001293C8 /* User.swift in Sources */,
 				4984C1BA2B3C405F001293C8 /* FirebaseService.swift in Sources */,
 				49A6C4222B36F91800389F78 /* FeedVC.swift in Sources */,
 				49A6C3FB2B35C57800389F78 /* AppDelegate.swift in Sources */,
 				49A6C3FD2B35C57800389F78 /* SceneDelegate.swift in Sources */,
 				4984C1AE2B39B1B5001293C8 /* Snap.swift in Sources */,
+				4984C1C12B3C528A001293C8 /* UIViewController+Ext.swift in Sources */,
 				49BCE94E2B3706060082C638 /* SettingsVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -7,22 +7,23 @@
 
 import UIKit
 import TinyConstraints
-import FirebaseAuth
-import Firebase
-import FirebaseCore
-import FirebaseFirestore
 
 class SignInVC: UIViewController {
     
+    
+    var vm = AuthenticationVM()
+    
     var appNameLabel : UILabel = {
         var label = UILabel()
-        label.text = "SnapChat"
+        label.text = "Snapchat"
+        label.font = UIFont.systemFont(ofSize: 50)
+        label.textColor = .systemYellow
         return label
     }()
     
     var emailTextField : UITextField = {
         var field = UITextField()
-        field.placeholder = "email"
+        field.placeholder = "Email"
         field.borderStyle = .roundedRect
         field.tintColor = .systemPink
         
@@ -30,7 +31,7 @@ class SignInVC: UIViewController {
     }()
     var usernameTextField : UITextField = {
         var field = UITextField()
-        field.placeholder = "username"
+        field.placeholder = "Username"
         field.borderStyle = .roundedRect
         field.tintColor = .systemPink
         
@@ -39,20 +40,25 @@ class SignInVC: UIViewController {
     
     var passwordTextField : UITextField = {
         var field = UITextField()
-        field.placeholder = "password"
-        field.borderStyle = .line
-        field.tintColor = .systemPink
-        
+        field.placeholder = "Password"
+        field.borderStyle = .roundedRect
+        field.isSecureTextEntry = true
+        return field
+    }()
+    
+    var showHideButton : UIButton = {
+        var field = UIButton()
+        field.setImage(UIImage(systemName: "eye.slash.fill"), for: .normal)
         return field
     }()
     
     
     var signInButton : UIButton = {
         var button = UIButton()
-        
-        button.setTitle("Signin", for: .normal)
-        button.setTitleColor(UIColor.black, for: .normal)
-        
+        button.setTitle("Sign In", for: .normal)
+        button.setTitleColor(UIColor.white, for: .normal)
+        button.layer.cornerRadius = 5
+        button.backgroundColor = .systemBlue
         return button
     }()
     
@@ -60,9 +66,10 @@ class SignInVC: UIViewController {
     var signUpButton : UIButton = {
         var button = UIButton()
         
-        button.setTitle("signUp", for: .normal)
-        button.setTitleColor(UIColor.black, for: .normal)
-        
+        button.setTitle("Sign Up", for: .normal)
+        button.setTitleColor(UIColor.white, for: .normal)
+        button.layer.cornerRadius = 5
+        button.backgroundColor = .systemGreen
         return button
     }()
     
@@ -70,11 +77,7 @@ class SignInVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .systemBackground
-        self.navigationItem.title = "sa"
-        self.tabBarController?.tabBar.isHidden = true
-        
-        print("lknsdfk")
-        
+                
     }
     
     
@@ -90,10 +93,12 @@ class SignInVC: UIViewController {
     
     func setupUI(){
         
-        appNameLabel.translatesAutoresizingMaskIntoConstraints = false
-        emailTextField.translatesAutoresizingMaskIntoConstraints   = false
-        signInButton.translatesAutoresizingMaskIntoConstraints = false
+        appNameLabel.translatesAutoresizingMaskIntoConstraints      = false
+        emailTextField.translatesAutoresizingMaskIntoConstraints    = false
+        signInButton.translatesAutoresizingMaskIntoConstraints      = false
         passwordTextField.translatesAutoresizingMaskIntoConstraints = false
+        showHideButton.translatesAutoresizingMaskIntoConstraints    = false
+        
         
         view.addSubview(appNameLabel)
         view.addSubview(emailTextField)
@@ -101,69 +106,69 @@ class SignInVC: UIViewController {
         view.addSubview(passwordTextField)
         view.addSubview(signInButton)
         view.addSubview(signUpButton)
+        passwordTextField.addSubview(showHideButton)
         
         appNameLabel.center(in: view, offset: CGPoint(x: 0, y: -view.frame.height/4))
-        emailTextField.topToBottom(of: appNameLabel , offset: 10)
+        
+        emailTextField.topToBottom(of: appNameLabel , offset: 50)
         emailTextField.centerX(to: appNameLabel)
-        emailTextField.width(view.frame.width / 3 )
+        emailTextField.width(view.frame.width / 1.5 )
         
         
         usernameTextField.topToBottom(of: emailTextField , offset: 10)
         usernameTextField.centerX(to: emailTextField)
-        usernameTextField.width(view.frame.width / 3 )
+        usernameTextField.width(to: emailTextField)
         
         
         passwordTextField.topToBottom(of: usernameTextField , offset: 10)
         passwordTextField.centerX(to: usernameTextField)
-        passwordTextField.width(view.frame.width / 3 )
+        passwordTextField.width(to: emailTextField)
         
-        signInButton.topToBottom(of: passwordTextField)
+        
+        showHideButton.trailing(to: passwordTextField)
+        showHideButton.height(to: passwordTextField)
+        showHideButton.width(40)
+        passwordTextField.bringSubviewToFront(showHideButton)
+        
+        signInButton.topToBottom(of: passwordTextField ,offset: 20)
         signInButton.centerX(to: passwordTextField,offset: -view.frame.width / 6 )
-        
+        signInButton.width((view.frame.width / 4) )
         signInButton.addTarget(self, action: #selector(signInTapped), for: .touchUpInside)
         
         
-        signUpButton.topToBottom(of: passwordTextField)
+        signUpButton.topToBottom(of: passwordTextField,offset: 20)
         signUpButton.centerX(to: passwordTextField,offset: view.frame.width / 6 )
+        signUpButton.width((view.frame.width / 4) )
+
         signUpButton.addTarget(self, action: #selector(signUpTapped), for: .touchUpInside)
+        
+        
+        showHideButton.addTarget(self, action: #selector(showHideTapped), for: .touchDown)
+        showHideButton.addTarget(self, action: #selector(showHideTapped), for: .touchUpInside)
+        
     }
     
     
-    @objc func signUpTapped(){
-        if usernameTextField.text != "" && passwordTextField.text != "" && emailTextField.text != "" {
-            Auth.auth().createUser(withEmail: emailTextField.text!, password: passwordTextField.text!){(auth,error) in
-                if error != nil {
-                    self.makeAlert(title: "error", message: error?.localizedDescription ?? "error")
-                }
-                else
-                {
-                    let fireStore = Firestore.firestore()
-                    let userDic = ["email" : self.emailTextField.text , "username" : self.usernameTextField.text] as! [String:Any]
-                    fireStore.collection("UserInfo").addDocument(data: userDic) { error in
-                        if error != nil {
-                            print(error?.localizedDescription)
-                        }
-                    }
-                    
-                    let vc = TabBarController()
-                    vc.modalPresentationStyle = .fullScreen
-                    self.present(vc, animated: true)
-                }
-                
-            }
-        }else{
-            self.makeAlert(title: "error", message: "sıkıtnı var")
+    @objc func showHideTapped(){
+        if passwordTextField.isSecureTextEntry{
+            passwordTextField.isSecureTextEntry = false
+            showHideButton.setImage(UIImage(systemName: "eye.slash.fill"), for: .normal)
+        }
+        else {
+            passwordTextField.isSecureTextEntry = true
+            showHideButton.setImage(UIImage(systemName: "eye.slash"), for: .normal)
         }
     }
     
-    
-    @objc func signInTapped(){
+    @objc func signUpTapped(){
         
         if usernameTextField.text != "" && passwordTextField.text != "" && emailTextField.text != "" {
             
-            Auth.auth().signIn(withEmail: emailTextField.text!, password: passwordTextField.text!) { result, error in
+            let user = User(username: usernameTextField.text!, email: emailTextField.text!, password: passwordTextField.text!)
+            
+            vm.createNewUser(with: user) { error in
                 if error != nil {
-                    self.makeAlert(title: "error", message: error?.localizedDescription ?? "error")
+                    self.createAlert(title: "Error", message: error!.localizedDescription)
                 }
                 else {
                     let vc = TabBarController()
@@ -173,20 +178,36 @@ class SignInVC: UIViewController {
             }
             
             
+        }else{
+            self.createAlert(title: "Error", message: "Fields are empty")
+        }
+    }
+    
+    
+    @objc func signInTapped(){
+        
+        if usernameTextField.text != "" && passwordTextField.text != "" && emailTextField.text != "" {
+            let user = User(username: usernameTextField.text!, email: emailTextField.text!, password: passwordTextField.text!)
+
+            vm.signIn(with: user) { error in
+                if error != nil {
+                    self.createAlert(title: "Error", message: error!.localizedDescription)
+                }
+                else {
+                    let vc = TabBarController()
+                    vc.modalPresentationStyle = .fullScreen
+                    self.present(vc, animated: true)
+                }
+            }
+            
+            
+            
         }
         else {
-            self.makeAlert(title: "error", message: "sıkıtnı var")
+            self.createAlert(title: "Error", message: "Fields are empty")
             
         }
     }
     
-    
-    
-    func makeAlert(title : String , message : String){
-        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
-        let okButton = UIAlertAction(title: "Ok", style: UIAlertAction.Style.default)
-        alert.addAction(okButton)
-        self.present(alert, animated: true)
-    }
 }
 
