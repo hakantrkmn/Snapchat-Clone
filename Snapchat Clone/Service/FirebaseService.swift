@@ -117,15 +117,19 @@ class FirebaseService{
                         let documentID = document.documentID
                         if let username = document.get("snapOwner") as? String{
                             if let imageUrlArray = document.get("imageUrlArray") as? [String]{
-                                if let date = document.get("date") as? Timestamp {
+                                if let date = document.get("date") as? [Timestamp] {
 
-                                    if let difference = Calendar.current.dateComponents([.minute], from: date.dateValue(), to: Date()).minute{
+                                    if let difference = Calendar.current.dateComponents([.minute], from: date[0].dateValue(), to: Date()).minute{
                                         if difference >= 1440 {
                                             //self.fireStoreDatabase.collection("Snaps").document(documentID).delete()
                                             self.deleteSnap(id: documentID)
                                         }
                                         else {
-                                            let snap = Snap(username: username, imageUrlArray: imageUrlArray, date: date.dateValue(), timeLeft: (1440-difference) / 60)
+                                            var tempList = [Date]()
+                                            for snapDate in date {
+                                                tempList.append(Date(timeIntervalSince1970: TimeInterval(snapDate.nanoseconds)))
+                                            }
+                                            let snap = Snap(username: username, imageUrlArray: imageUrlArray, date: tempList, timeLeft: (1440-difference) / 60)
                                             snapArray.append(snap)
                                         }
                                     }
