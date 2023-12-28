@@ -54,6 +54,7 @@ class SignInVC: UIViewController {
     
     
     var signInButton : UIButton = {
+        
         var button = UIButton()
         button.setTitle("Sign In", for: .normal)
         button.setTitleColor(UIColor.white, for: .normal)
@@ -77,7 +78,7 @@ class SignInVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .systemBackground
-                
+        
     }
     
     
@@ -141,7 +142,7 @@ class SignInVC: UIViewController {
         signUpButton.topToBottom(of: passwordTextField,offset: 20)
         signUpButton.centerX(to: passwordTextField,offset: view.frame.width / 6 )
         signUpButton.width((view.frame.width / 4) )
-
+        
         signUpButton.addTarget(self, action: #selector(signUpTapped), for: .touchUpInside)
         
         
@@ -190,7 +191,7 @@ class SignInVC: UIViewController {
         
         if usernameTextField.text != "" && passwordTextField.text != "" && emailTextField.text != "" {
             let user = User(username: usernameTextField.text!, email: emailTextField.text!, password: passwordTextField.text!)
-
+            
             vm.signIn(with: user) { error in
                 if error != nil {
                     self.createAlert(title: "Error", message: error!.localizedDescription)

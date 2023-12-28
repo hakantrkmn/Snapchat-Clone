@@ -76,6 +76,7 @@ class FirebaseService{
     
     func getUserInfo(completion : @escaping (Error?) -> ()) {
 
+
         fireStore.collection("UserInfo").whereField("email", isEqualTo: Auth.auth().currentUser?.email).getDocuments { snapshot, error in
             if error != nil {
 
@@ -100,6 +101,7 @@ class FirebaseService{
     }
     
     func deleteSnap(id : String){
+        
         fireStore.collection("Snaps").document(id).delete()
     }
     func getSnaps(completion : @escaping (Error?,[Snap]?) -> Void){
@@ -143,7 +145,7 @@ class FirebaseService{
     
     
     
-    func uploadImage(with image : UIImage , to destination : String , completion : @escaping (Error?)-> ()){
+    func uploadImage(with image : UIImage , to destination : String , completion : @escaping (Error?) -> ()) {
         
         let storageReference = storage.reference()
         let mediaFolder = storageReference.child(destination)
@@ -153,7 +155,7 @@ class FirebaseService{
             let uuid = UUID().uuidString
             let imageReference = mediaFolder.child("\(uuid).jpg")
             
-            imageReference.putData(data) { (metadata,error) in
+            imageReference.putData(data)  { (metadata,error) in
                 if error != nil {
                     completion(error)
                 }
@@ -217,4 +219,9 @@ class FirebaseService{
         }
     }
         
+}
+
+
+enum FirebaseErrors : Error {
+    case sa
 }

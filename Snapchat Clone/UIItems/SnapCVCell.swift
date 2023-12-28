@@ -13,7 +13,7 @@ class SnapCVCell: UICollectionViewCell {
     var snapView : UIImageView = {
         var view = UIImageView()
         view.contentMode = .scaleAspectFit
-        view.image = UIImage(named: "test")
+        view.image = UIImage(named: " ")
         view.clipsToBounds = true
         return view
     }()

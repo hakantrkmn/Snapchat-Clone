@@ -10,29 +10,11 @@ import TinyConstraints
 import PhotosUI
 import FirebaseStorage
 import FirebaseFirestore
-class UploadVC: UIViewController, PHPickerViewControllerDelegate {
+class UploadVC: UIViewController {
     
     
     let vm = UploadVM()
     
-    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        dismiss(animated: true)
-        
-        vm.getSelectedImage(results: results) { error, image in
-            if error != nil {
-                self.createAlert(title: "Error", message: error?.localizedDescription ?? "")
-            }
-            else {
-                DispatchQueue.main.async{
-                    self.uploadImageView.image = image
-
-                }
-            }
-        }
-       
-    }
-    
-
     var uploadImageView : UIImageView = {
        var view = UIImageView()
         view.layer.borderColor = UIColor.black.cgColor
@@ -67,12 +49,14 @@ class UploadVC: UIViewController, PHPickerViewControllerDelegate {
     
     @objc func uploadTapped(){
         
+        uploadButton.setTitle("yükleniyor", for: .normal)
         vm.uploadImage(with: uploadImageView.image!) { error in
             if error != nil{
                 self.createAlert(title: "Error", message: error?.localizedDescription ?? "")
             }
             else
             {
+                self.uploadButton.setTitle("yüklendi", for: .normal)
                 self.tabBarController?.selectedIndex = 0
             }
         }
@@ -114,4 +98,25 @@ class UploadVC: UIViewController, PHPickerViewControllerDelegate {
 
     }
 
+}
+
+extension UploadVC : PHPickerViewControllerDelegate{
+    
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        dismiss(animated: true)
+        
+        vm.getSelectedImage(results: results) { error, image in
+            if error != nil {
+                self.createAlert(title: "Error", message: error?.localizedDescription ?? "")
+            }
+            else {
+                
+                DispatchQueue.main.async{
+                    self.uploadImageView.image = image
+
+                }
+            }
+        }
+       
+    }
 }

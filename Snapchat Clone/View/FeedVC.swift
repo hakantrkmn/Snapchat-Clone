@@ -9,6 +9,8 @@ import UIKit
 import TinyConstraints
 import FirebaseFirestore
 import FirebaseAuth
+
+
 class FeedVC: UIViewController {
 
     
@@ -18,6 +20,11 @@ class FeedVC: UIViewController {
        var tableView = UITableView()
         tableView.register(FeedTVCell.self, forCellReuseIdentifier: FeedTVCell.identifier)
         return tableView
+    }()
+    
+    public var nicknameLabel : UILabel = {
+       var label = UILabel()
+        return label
     }()
     
     var snapArray = [Snap]()
@@ -32,23 +39,17 @@ class FeedVC: UIViewController {
         feedTableView.delegate = self
         feedTableView.dataSource = self
         
-        vm.getUserInfo(view: self)
 
-        getSnapsFromFirebase()
+
     
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setDatabase()
 
-    func setupUI(){
-        view.addSubview(feedTableView)
-        
-        
-        feedTableView.edgesToSuperview()
     }
-    
-    
-    func getSnapsFromFirebase(){
-        snapArray.removeAll()
+    func setDatabase() {
         vm.getSnaps { error, snaps in
             if error != nil {
                 self.createAlert(title: "Error", message: error?.localizedDescription ?? "")
@@ -61,7 +62,34 @@ class FeedVC: UIViewController {
                 }
             }
         }
+        
+        vm.getUserInfo { error in
+            if error != nil {
+                self.createAlert(title: "Error", message: error?.localizedDescription ?? "")
+            }
+            else {
+                print(UserSingleton.sharedUserInfo.username)
+                self.nicknameLabel.text = UserSingleton.sharedUserInfo.username
+
+            }
+        }
+
     }
+    
+
+    func setupUI(){
+        view.addSubview(feedTableView)
+        self.navigationController?.navigationBar.addSubview(nicknameLabel)
+     
+        
+        feedTableView.edgesToSuperview()
+        
+        nicknameLabel.trailingToSuperview()
+        nicknameLabel.centerY(to: self.navigationController!.navigationBar)
+    }
+    
+    
+   
 
 }
 

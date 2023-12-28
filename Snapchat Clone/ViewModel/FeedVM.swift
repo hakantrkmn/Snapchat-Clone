@@ -13,11 +13,10 @@ class FeedVM {
     
     var service = FirebaseService()
     
-    func getUserInfo(view : UIViewController){
+    func getUserInfo(completion : @escaping (Error?) -> Void) {
         service.getUserInfo { error in
-            if error != nil {
-                view.createAlert(title: "Error", message: error?.localizedDescription ?? "")
-            }
+            completion(error)
+            
         }
     }
     
@@ -25,11 +24,11 @@ class FeedVM {
         service.getSnaps { error, snaps in
             if error != nil {
                 completion(error,nil)
-
+                
             }else
             {
                 completion(nil,snaps)
-
+                
             }
         }
     }

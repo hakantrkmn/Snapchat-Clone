@@ -101,7 +101,7 @@ extension SnapVC : UICollectionViewDelegate , UICollectionViewDataSource , UICol
             }
 
             cell.configure(url: snap.imageUrlArray[indexPath.section])
-            timeLeftLabel.text = "Time left :  \(snap.timeLeft ?? 0)"
+            timeLeftLabel.text = "Time left :  \(snap.timeLeft ?? 0 ) hours left"
             return cell
 
         } else {

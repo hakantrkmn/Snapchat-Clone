@@ -35,7 +35,6 @@ class SettingsVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         setupUI()
-        logoutButton.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
     }
     
     @objc func logoutButtonTapped(){
@@ -43,6 +42,11 @@ class SettingsVC: UIViewController {
         service.logOutUser { error in
             if error != nil {
                 self.createAlert(title: "Error", message: error?.localizedDescription ?? "")
+            }
+            else{
+                let vc = SignInVC()
+                vc.modalPresentationStyle = .fullScreen
+                self.present(vc, animated: true)
             }
             
         }
@@ -55,7 +59,8 @@ class SettingsVC: UIViewController {
         
         logoutButton.center(in: view )
         logoutButton.widthToSuperview(offset: -view.frame.width / 2)
-        
+        logoutButton.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
+
     }
     
 
